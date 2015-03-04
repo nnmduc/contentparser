@@ -22,6 +22,8 @@ class IndexController < ApplicationController
 			@content = vnexpress(pageUrl)
 		when "www.yan.vn" || "yan.vn"
 			@content = yan(pageUrl)
+		when "news.zing.vn"
+			@content = zing(pageUrl)
 		else
 			@content = unknow(pageUrl)
 		end
@@ -82,6 +84,18 @@ class IndexController < ApplicationController
 			doc = Nokogiri::HTML(open(pageUrl))
 			body = doc.css('#contentBody')
 			body.css('.inner-article').remove
+			body.xpath('//@style').remove
+			body.xpath('//@class').remove
+			body.xpath('//@id').remove
+			body.inner_html
+		end
+
+		def zing(pageUrl)
+			#contentBody
+			doc = Nokogiri::HTML(open(pageUrl))
+			body = doc.css('#content > article > div.content')
+			body.css('.inner-article').remove
+			body.css('.inner-video').remove
 			body.xpath('//@style').remove
 			body.xpath('//@class').remove
 			body.xpath('//@id').remove
