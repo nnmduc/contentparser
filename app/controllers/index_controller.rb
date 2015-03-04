@@ -8,7 +8,6 @@ class IndexController < ApplicationController
 		require 'nokogiri'
 		require 'open-uri'
 		pageUrl = params[:url]
-		# Fetch and parse HTML document
 		doc = Nokogiri::HTML(open(pageUrl))
 
 		body = doc.css('div#abody')
