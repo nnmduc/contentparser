@@ -11,8 +11,6 @@ class IndexController < ApplicationController
 	def show
 		pageUrl = params[:url]
 		uri = URI(pageUrl)
-		puts "================================================================ YAN"
-		puts uri.host
 		case uri.host
 		when "kienthuc.net.vn" || "www.kienthuc.net.vn"
 			@content = kienthuc(pageUrl)
@@ -24,6 +22,8 @@ class IndexController < ApplicationController
 			@content = yan(pageUrl)
 		when "news.zing.vn"
 			@content = zing(pageUrl)
+		when "ngoisao.net"
+			@content = ngoisao(pageUrl)
 		else
 			@content = unknow(pageUrl)
 		end
@@ -96,6 +96,18 @@ class IndexController < ApplicationController
 			body = doc.css('#content > article > div.content')
 			body.css('.inner-article').remove
 			body.css('.inner-video').remove
+			body.xpath('//@style').remove
+			body.xpath('//@class').remove
+			body.xpath('//@id').remove
+			body.inner_html
+		end
+
+		def ngoisao(pageUrl)
+			#contentBody
+			doc = Nokogiri::HTML(open(pageUrl))
+			body = doc.css('#left > div > div > div.detailCT > div.fck_detail')
+			body.css('link').remove
+			body.css('object').remove
 			body.xpath('//@style').remove
 			body.xpath('//@class').remove
 			body.xpath('//@id').remove
