@@ -26,6 +26,8 @@ class IndexController < ApplicationController
 			@content = zing(pageUrl)
 		when "ngoisao.net"
 			@content = ngoisao(pageUrl)
+		when "dantri.com.vn"
+			@content = dantri(pageUrl)
 		else
 			@content = unknow(pageUrl)
 		end
@@ -116,6 +118,16 @@ class IndexController < ApplicationController
 		def ione(pageUrl)
 			doc = Nokogiri::HTML(open(pageUrl))
 			body = doc.css('#box_details_news > div > div.fck_detail.width_common')
+			body.xpath('//@style').remove
+			body.xpath('//@class').remove
+			body.xpath('//@id').remove
+			body.inner_html
+		end
+
+		def dantri(pageUrl)
+			doc = Nokogiri::HTML(open(pageUrl))
+			body = doc.css('#ctl00_IDContent_ctl00_divContent > div.detail-content')
+			body.css('.news-tag').remove
 			body.xpath('//@style').remove
 			body.xpath('//@class').remove
 			body.xpath('//@id').remove
