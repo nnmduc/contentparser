@@ -11,13 +11,17 @@ class IndexController < ApplicationController
 	def show
 		pageUrl = params[:url]
 		uri = URI(pageUrl)
+		puts "================================================================ YAN"
+		puts uri.host
 		case uri.host
-		when "kienthuc.net.vn"
+		when "kienthuc.net.vn" || "www.kienthuc.net.vn"
 			@content = kienthuc(pageUrl)
-		when "kenh14.vn"
+		when "kenh14.vn" || "www.kenh14.vn"
 			@content = kenh14(pageUrl)
-		when "vnexpress.net"
+		when "vnexpress.net" || "www.vnexpress.net"
 			@content = vnexpress(pageUrl)
+		when "www.yan.vn" || "yan.vn"
+			@content = yan(pageUrl)
 		else
 			@content = unknow(pageUrl)
 		end
@@ -26,6 +30,7 @@ class IndexController < ApplicationController
 
 
 	private
+
 		def unknow(pageUrl)
 			doc = Nokogiri::HTML(open(pageUrl))
 			body = doc.css('body')
@@ -71,4 +76,16 @@ class IndexController < ApplicationController
 			body.xpath('//@id').remove
 			body.inner_html
 		end
+
+		def yan(pageUrl)
+			#contentBody
+			doc = Nokogiri::HTML(open(pageUrl))
+			body = doc.css('#contentBody')
+			body.css('.inner-article').remove
+			body.xpath('//@style').remove
+			body.xpath('//@class').remove
+			body.xpath('//@id').remove
+			body.inner_html
+		end
+
 end
