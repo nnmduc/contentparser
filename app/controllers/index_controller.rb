@@ -16,9 +16,12 @@ class IndexController < ApplicationController
 			@content = kienthuc(pageUrl)
 		when "kenh14.vn"
 			@content = kenh14(pageUrl)
+		when "vnexpress.net"
+			@content = vnexpress(pageUrl)
 		else
 			@content = unknow(pageUrl)
 		end
+		@url = pageUrl
 	end
 
 
@@ -27,6 +30,17 @@ class IndexController < ApplicationController
 			doc = Nokogiri::HTML(open(pageUrl))
 			body = doc.css('body')
 			body.xpath('//@style').remove
+			body.xpath('//@class').remove
+			body.xpath('//@id').remove
+			body.inner_html
+		end
+
+		def vnexpress(pageUrl)
+			doc = Nokogiri::HTML(open(pageUrl))
+			body = doc.css('#left_calculator > div.fck_detail.width_common')
+			body.xpath('//@style').remove
+			body.xpath('//@class').remove
+			body.xpath('//@id').remove
 			body.inner_html
 		end
 
@@ -34,6 +48,8 @@ class IndexController < ApplicationController
 			doc = Nokogiri::HTML(open(pageUrl))
 			body = doc.css('div#abody')
 			body.xpath('//@style').remove
+			body.xpath('//@class').remove
+			body.xpath('//@id').remove
 			body.css('div').each do |div|
 				if div.content == ''
 					div.remove
@@ -51,6 +67,8 @@ class IndexController < ApplicationController
 			doc = Nokogiri::HTML(open(pageUrl))
 			body = doc.css('#admWrapsite > div.contentwrapper > div > div > div.maincontent.clearfix > div.postwrapper.clearfix > div:nth-child(1) > div.content > div')
 			body.xpath('//@style').remove
+			body.xpath('//@class').remove
+			body.xpath('//@id').remove
 			body.inner_html
 		end
 end
