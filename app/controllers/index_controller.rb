@@ -16,8 +16,10 @@ class IndexController < ApplicationController
 			@content = kienthuc(pageUrl)
 		when "kenh14.vn" || "www.kenh14.vn"
 			@content = kenh14(pageUrl)
-		when "vnexpress.net" || "www.vnexpress.net"
+		when "www.vnexpress.net"
 			@content = vnexpress(pageUrl)
+		when "ione.vnexpress.net"
+			@content = ione(pageUrl)
 		when "www.yan.vn" || "yan.vn"
 			@content = yan(pageUrl)
 		when "news.zing.vn"
@@ -80,7 +82,6 @@ class IndexController < ApplicationController
 		end
 
 		def yan(pageUrl)
-			#contentBody
 			doc = Nokogiri::HTML(open(pageUrl))
 			body = doc.css('#contentBody')
 			body.css('.inner-article').remove
@@ -91,7 +92,6 @@ class IndexController < ApplicationController
 		end
 
 		def zing(pageUrl)
-			#contentBody
 			doc = Nokogiri::HTML(open(pageUrl))
 			body = doc.css('#content > article > div.content')
 			body.css('.inner-article').remove
@@ -103,11 +103,19 @@ class IndexController < ApplicationController
 		end
 
 		def ngoisao(pageUrl)
-			#contentBody
 			doc = Nokogiri::HTML(open(pageUrl))
 			body = doc.css('#left > div > div > div.detailCT > div.fck_detail')
 			body.css('link').remove
 			body.css('object').remove
+			body.xpath('//@style').remove
+			body.xpath('//@class').remove
+			body.xpath('//@id').remove
+			body.inner_html
+		end
+
+		def ione(pageUrl)
+			doc = Nokogiri::HTML(open(pageUrl))
+			body = doc.css('#box_details_news > div > div.fck_detail.width_common')
 			body.xpath('//@style').remove
 			body.xpath('//@class').remove
 			body.xpath('//@id').remove
